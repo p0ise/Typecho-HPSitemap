@@ -37,7 +37,6 @@ class HPSitemap_Plugin implements Typecho_Plugin_Interface
             _t('接口地址：你的网站/action/update_sitemap?auth=接口密匙(若设置了伪静态，别忘了加上/index.php/)')
         );
         $form->addInput($import_user_auth);
-
     }
 
 

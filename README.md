@@ -3,6 +3,10 @@
 
 
 
+- [ ] {directory}多级分类解析
+
+
+
 ## 实现原理：
 
 通过了Sitemap路径索引所方式，以1000篇文章为一个节点，生成一个单独的Sitemap.xml文件，然后再对生成的Sitemap.xml链接进行一个聚合。
@@ -19,7 +23,10 @@
 
 4. 监控该URL（频率可设置为5分钟左右）
 
-### 插件地址：
+
+
+## 插件地址：
+
 优化版地址：
 - github主页：<https://github.com/invelop/Typecho-HPSitemap>
 - 码云主页：<https://gitee.com/ETAS/Typecho-HPSitemap>

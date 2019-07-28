@@ -217,7 +217,7 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
         }else{
             $tmp = array(
                 'loc'=>SITE_URL.SITEMAP_DIR.$sitemap_filename,
-                'lastmod'=>gmdate('Y-m-d\TH:i:s+00:00',time())
+                'lastmod'=>gmdate('Y-m-d\TH:i:s+08:00',time())
             );
             return $tmp;
         }

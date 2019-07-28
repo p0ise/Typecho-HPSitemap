@@ -28,7 +28,7 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
      * @return void
      */
     public function action() {
-        @ set_time_limit (60000); //时间限制
+        @ set_time_limit (60); //时间限制
 
         define('SITE_URL',Helper::options()->siteUrl);
 
@@ -98,7 +98,7 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
         }
         log_to_client("Done for posts index.");
 
-        //生成category的sitem
+        //生成category的sitemap
         while(true){
             log_to_client('Generating category index for file '.$simtemap_file_index);
             $category_query->cleanAttribute('limit');

@@ -26,15 +26,15 @@ class HPSitemap_Plugin implements Typecho_Plugin_Interface
 
         $sitemap_dir = new Typecho_Widget_Helper_Form_Element_Text(
             'sitemap_dir',NULL ,'sitemap',
-            _t('设置生成sitemap的目录,根目录是usr目录。'),
-            _t('譬如设置sitemap,则会在usr/sitemap/下生成sitemap.xml,请保证此目录可访问')
+            _t('设置生成sitemap的目录(根目录是usr目录)'),
+            _t('如:设置sitemap,则会在usr/sitemap/下生成sitemap.xml,请保证此目录可访问')
         );
         $form->addInput($sitemap_dir);
 
         $import_user_auth = new Typecho_Widget_Helper_Form_Element_Text(
             'sitemap_user_auth',NULL ,'',
             _t('设置调用接口时的密匙'),
-            _t('接口地址：你的网站/action/update_sitemap?auth=接口密匙')
+            _t('接口地址：你的网站/action/update_sitemap?auth=接口密匙(若设置了伪静态，别忘了加上/index.php/)')
         );
         $form->addInput($import_user_auth);
 

@@ -191,7 +191,7 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
         $result = array_map(function($item){
             return array(
                 'loc'=>isset($item['cid'])?$this->build_post_url($item):$this->build_category_url($item),
-                'lastmod'=>gmdate('Y-m-d\TH:i:s+08:00',$item['last_modified'])
+                'lastmod'=>gmdate("Y-m-d\TH:i:s+08:00",$item['last_modified'])
             );
         },$list);
         return $result;

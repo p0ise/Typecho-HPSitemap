@@ -1,7 +1,7 @@
 <?php
 
 /**
- * sitemap生成工具。<a href='www.typecho.wiki/archives/typecho-sitemap-generation-plugin-sitemap-bigdata.html'>需要帮助?</a>
+ * sitemap生成工具。<a href='https://blog.irow.top/index.php/archives/256/' title='help' target='_blank'>需要帮助?</a>
  *
  * @category widget
  * @package HPSitemap

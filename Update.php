@@ -138,7 +138,18 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
                     ->where('table.relationships.cid = ?', $post['cid'])
                     ->where('table.metas.type = ?', 'category')
                     ->order('table.metas.order', Typecho_Db::SORT_ASC));
+            //多级分类
+            foreach ($post['categories'] as $category) {
+              if(0!=$category['parent']){
+                $parent = $db->fetchRow($db->select()->from('table.metas')
+                    ->where('table.metas.mid = ?',$category['parent']));
+                $post['directory'] = urlencode($parent['slug']).'/'.urlencode($category['slug']);
+                break;
+              }
+            }
+
             $post['category'] = urlencode(current(Typecho_Common::arrayFlatten($post['categories'], 'slug')));
+            if($post['directory']==NULL) $post['directory']=$post['category'];
             $post['slug'] = urlencode($post['slug']);
             $post['date'] = new Typecho_Date($post['created']);
             $post['year'] = $post['date']->year;
@@ -152,7 +163,7 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
 
     function build_category_url($cat){
         $return =  Typecho_Router::url('category',$cat);
-	return Helper::options()->index.$url;
+	      return Helper::options()->index.$url;
     }
     //mobile sitemap protocol
     function build_site_map_xml_content($list){

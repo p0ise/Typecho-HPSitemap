@@ -28,6 +28,7 @@
 ## 插件地址：
 
 优化版地址：
+- 博客：<https://blog.irow.top/archive/256.html>
 - github主页：<https://github.com/invelop/Typecho-HPSitemap>
 - 码云主页：<https://gitee.com/ETAS/Typecho-HPSitemap>
 

@@ -1,13 +1,13 @@
 <?php
 
 /**
- * sitemap生成工具。<a href='https://blog.irow.top/index.php/archives/256/' title='help' target='_blank'>需要帮助?</a>
+ * sitemap生成工具。<a href='https://blog.irow.top/archives/256.html' title='help' target='_blank'>需要帮助?</a>
  *
  * @category widget
  * @package HPSitemap
  * @author Roogle&雷鬼&承影
- * @version 2.1
- * @link https://www.typecho.wiki
+ * @version 2.2
+ * @link https://blog.irow.top/archives/256.html
  */
 
 class HPSitemap_Plugin implements Typecho_Plugin_Interface

@@ -6,7 +6,7 @@
  * @category widget
  * @package HPSitemap
  * @author Roogle&雷鬼&承影
- * @version 2.2
+ * @version 2.3
  * @link https://blog.irow.top/archives/256.html
  */
 
@@ -34,7 +34,7 @@ class HPSitemap_Plugin implements Typecho_Plugin_Interface
         $import_user_auth = new Typecho_Widget_Helper_Form_Element_Text(
             'sitemap_user_auth',NULL ,'',
             _t('设置调用接口时的密匙'),
-            _t('接口地址：你的网站/action/update_sitemap?auth=接口密匙(若设置了伪静态，别忘了加上/index.php/)')
+            _t('接口地址：你的网站/action/update_sitemap?auth=接口密匙(若未设置伪静态，别忘了加上/index.php/)')
         );
         $form->addInput($import_user_auth);
     }

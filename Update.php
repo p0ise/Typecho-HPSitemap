@@ -138,7 +138,11 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
                     ->where('table.relationships.cid = ?', $post['cid'])
                     ->where('table.metas.type = ?', 'category')
                     ->order('table.metas.order', Typecho_Db::SORT_ASC));
+
+            $post['category'] = urlencode(current(Typecho_Common::arrayFlatten($post['categories'], 'slug')));
+
             //多级分类
+            $post['directory']=$post['category'];
             foreach ($post['categories'] as $category) {
               if(0!=$category['parent']){
                 $parent = $db->fetchRow($db->select()->from('table.metas')
@@ -148,8 +152,6 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
               }
             }
 
-            $post['category'] = urlencode(current(Typecho_Common::arrayFlatten($post['categories'], 'slug')));
-            if($post['directory']==NULL) $post['directory']=$post['category'];
             $post['slug'] = urlencode($post['slug']);
             $post['date'] = new Typecho_Date($post['created']);
             $post['year'] = $post['date']->year;

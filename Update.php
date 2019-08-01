@@ -42,7 +42,7 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
         if(!$settings) $this->die_with_json(1001, '未开启Typecho插件');
 
         $auth_key = $settings->sitemap_user_auth;
-        $key = $request->get('auth','xxx');
+        $key = $request->get('auth','yourkey');
         if(empty($auth_key) || empty($key) || $auth_key !== $key){
             $this->die_with_json(false, 'Invalid auth key');
         }
@@ -167,32 +167,36 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
         $return =  Typecho_Router::url('category',$cat);
 	      return Helper::options()->index.$url;
     }
-    //mobile sitemap protocol
+
     function build_site_map_xml_content($list){
-        $str='<?xml version="1.0" encoding="UTF-8" ?>';
-        $str .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:mobile="http://www.baidu.com/schemas/sitemap-mobile/1/">';
+        //if mobile sitemap protocol
+        @$mobile = Helper::options()->plugin('HPSitemap')->mobile;
+
+        $str='<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        if($mobile) $str .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '."\n".'xmlns:mobile="http://www.baidu.com/schemas/sitemap-mobile/1/">'."\n";
+        else $str .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
+
         foreach($list as $item){
-            $str .= '<url>';
-            $str .= "<loc>{$item['loc']}</loc>";
-            $str .= '<mobile:mobile type="pc,mobile"/>';
-            $str .= "<lastmod>{$item['lastmod']}</lastmod>";
-            $str .= '<changefreq>daily</changefreq>';
-            $str .= '<priority>0.8</priority>';
-            $str .= '</url>';
+            $str .= '<url>'."\n";
+            $str .= "<loc>{$item['loc']}</loc>\n";
+            if($mobile) $str .= '<mobile:mobile type="pc,mobile"/>';
+            $str .= "<lastmod>{$item['lastmod']}</lastmod>\n";
+            $str .= '<changefreq>daily</changefreq>'."\n";
+            $str .= '<priority>0.8</priority>'."\n";
+            $str .= '</url>'."\n";
         }
         $str .= '</urlset>';
         return $str;
     }
 
     function build_site_map_index($list){
-        $str='<?xml version="1.0" encoding="UTF-8" ?>';
-        $str .='<sitemapindex>';
+        $str='<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $str .='<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
         foreach($list as $item){
-            $str .='<sitemap>';
-            $str.="<loc>{$item['loc']}</loc>";
-            $str.="<lastmod>{$item['lastmod']}</lastmod>";
-            $str .='</sitemap>';
+            $str .='<sitemap>'."\n";
+            $str.="<loc>{$item['loc']}</loc>"."\n";
+            $str.="<lastmod>{$item['lastmod']}</lastmod>"."\n";
+            $str .='</sitemap>'."\n";
         }
 
         $str .='</sitemapindex>';

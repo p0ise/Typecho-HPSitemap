@@ -6,7 +6,7 @@
  * @category widget
  * @package HPSitemap
  * @author Roogle&雷鬼&承影
- * @version 2.3
+ * @version 2.5
  * @link https://blog.irow.top/archives/256.html
  */
 
@@ -37,6 +37,11 @@ class HPSitemap_Plugin implements Typecho_Plugin_Interface
             _t('接口地址：你的网站/action/update_sitemap?auth=接口密匙(若未设置伪静态，别忘了加上/index.php/)')
         );
         $form->addInput($import_user_auth);
+
+        $mobile = new Typecho_Widget_Helper_Form_Element_Radio('mobile',
+            ['0' => _t('否'), '1' => _t('是')],
+            '0', _t('是否使用百度移动协议'), _t('百度移动协议的头文件可能不被Google和其他搜索引擎识别'));
+        $form->addInput($mobile);
     }
 
 

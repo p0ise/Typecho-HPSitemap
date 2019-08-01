@@ -19,7 +19,7 @@
 2. 后台设置生成目录和密匙
 3. 访问生成sitemap方法的url，测试生成sitemap，并前往sitemap路径检验是否成功
   - URL构造为`你的域名/action/update_sitemap?auth=密匙`
-  - 如果开启了伪静态，则URL为`你的域名/index.php/action/update_sitemap?auth=密匙`
+  - 如果未开启伪静态，则URL为`你的域名/index.php/action/update_sitemap?auth=密匙`
 
 4. 监控该URL（频率可设置为5分钟左右）
 

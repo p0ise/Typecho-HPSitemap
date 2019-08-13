@@ -21,7 +21,7 @@
   - URL构造为`你的域名/action/update_sitemap?auth=密匙`
   - 如果未开启伪静态，则URL为`你的域名/index.php/action/update_sitemap?auth=密匙`
 
-4. 监控该URL（频率可设置为5分钟左右）
+4. 监控该URL（频率可设置为5分钟左右，看个人需求）
 
 
 

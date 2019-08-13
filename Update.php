@@ -53,7 +53,7 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
         //检查目录环境
         $sitemap_dir = rtrim($sitemap_dir,'/').'/';
 
-        define('SITEMAP_DIR','usr/'.$sitemap_dir);
+        define('SITEMAP_DIR',$sitemap_dir);
         define('SITEMAP_FULL_DIR',__TYPECHO_ROOT_DIR__.'/'.SITEMAP_DIR);
 
         if(!is_dir(SITEMAP_FULL_DIR)){

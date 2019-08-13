@@ -6,7 +6,7 @@
  * @category widget
  * @package HPSitemap
  * @author Roogle&雷鬼&承影
- * @version 2.5
+ * @version 2.5.1
  * @link https://blog.irow.top/archives/256.html
  */
 
@@ -26,8 +26,8 @@ class HPSitemap_Plugin implements Typecho_Plugin_Interface
 
         $sitemap_dir = new Typecho_Widget_Helper_Form_Element_Text(
             'sitemap_dir',NULL ,'sitemap',
-            _t('设置生成sitemap的目录(根目录是usr目录)'),
-            _t('如:设置sitemap,则会在usr/sitemap/下生成sitemap.xml,请保证此目录可访问')
+            _t('设置生成sitemap的目录(根目录即站点根目录)'),
+            _t('如:设置sitemap,则会在./sitemap/下生成sitemap.xml,请保证此目录可访问')
         );
         $form->addInput($sitemap_dir);
 

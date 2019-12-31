@@ -68,7 +68,8 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
         $content_query= $db->select('cid,slug, modified as last_modified')
             ->from('table.contents')
             ->where('status = ?', 'publish')
-            ->where('type =?', 'post');
+            ->where('type =?', 'post')
+			->where('create <= modified');//筛除预发布
         $category_query = $db->select('mid, slug, unix_timestamp() as last_modified')
             ->from('table.metas')
             ->where('type =?', 'category');

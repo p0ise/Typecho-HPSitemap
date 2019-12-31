@@ -58,63 +58,91 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
 
         if(!is_dir(SITEMAP_FULL_DIR)){
             if(!mkdir(SITEMAP_FULL_DIR)){
-                $this->die_with_json(1003,'Mkdir sitemap dir failed: '.SITEMAP_FULL_DIR);
+                $this->die_with_json(1003,'创建sitemap路径失败：'.SITEMAP_FULL_DIR);
             }
         }
-
+		if(!function_exists('array_map')) $this->die_with_json(1004,'函数array_map不存在');
 
         $db = Typecho_Db::get();
 
-        $content_query= $db->select('cid,slug, modified as last_modified')
+        $post_query = $db->select('cid,slug, modified as last_modified')
             ->from('table.contents')
             ->where('status = ?', 'publish')
             ->where('type =?', 'post')
 			->where('created <= modified');//筛除预发布
+		$page_query = $db->select('cid,slug, modified as last_modified')
+            ->from('table.contents')
+            ->where('status = ?', 'publish')
+            ->where('type =?', 'page')
+			->where('created <= modified');
         $category_query = $db->select('mid, slug, unix_timestamp() as last_modified')
             ->from('table.metas')
             ->where('type =?', 'category');
 
-
-        $simtemap_file_index = 1;
+		$current_base_index = 1;
+        $sitemap_file_index = 1;
         $array_sitemap_index = array();
 
         //生成post的sitemap
         while(true){
-            log_to_client('Generating post index for file '.$simtemap_file_index);
-            $content_query->cleanAttribute('limit');
-            $content_query->cleanAttribute('offset');
+            log_to_client('Generating post index for file '.$sitemap_file_index);
+            $post_query->cleanAttribute('limit');
+            $post_query->cleanAttribute('offset');
 
-            $content_query->limit(MAX_LEN_PER_PROCESS);
-            $content_query->offset((intval($simtemap_file_index) - 1) * MAX_LEN_PER_PROCESS);
-            $list = $this->fetch_next($db, $content_query);
+            $post_query->limit(MAX_LEN_PER_PROCESS);
+            $post_query->offset(($sitemap_file_index - $current_base_index) * MAX_LEN_PER_PROCESS);
+            $list = $this->change_sql_list_to_sitemap_format('post',$this->fetch_next($db, $post_query));
 
             // print_r($list);
             if(empty($list)) break;
 
-            $sitemap_info = $this->build_sitemap_file_for_sql_items($list,$simtemap_file_index);
+            $sitemap_info = $this->build_sitemap_file_for_sql_items($list,$sitemap_file_index);
             if(empty($sitemap_info)) break;
             $array_sitemap_index[] = $sitemap_info;
             // print_r($sitemap_info);
-            $simtemap_file_index += 1;
+            $sitemap_file_index += 1;
         }
         log_to_client("Done for posts index.");
 
-        //生成category的sitemap
+        //生成page的sitemap
+		$current_base_index = $sitemap_file_index;
         while(true){
-            log_to_client('Generating category index for file '.$simtemap_file_index);
+            log_to_client('Generating page index for file '.$sitemap_file_index);
+            $page_query->cleanAttribute('limit');
+            $page_query->cleanAttribute('offset');
+
+            $page_query->limit(MAX_LEN_PER_PROCESS);
+            $page_query->offset(($sitemap_file_index - $current_base_index) * MAX_LEN_PER_PROCESS);
+
+			$list = $this->fetch_next($db, $page_query);
+            $list = $this->change_sql_list_to_sitemap_format('page',$list);
+            if(empty($list)) break;
+			
+            $sitemap_info = $this->build_sitemap_file_for_sql_items($list,$sitemap_file_index);
+            if(empty($sitemap_info)) break;
+			
+            $array_sitemap_index[] = $sitemap_info;
+            $sitemap_file_index += 1;
+        }
+        log_to_client("Done for pages index.");
+
+        //生成category的sitemap
+		$current_base_index = $sitemap_file_index;
+        while(true){
+            log_to_client('Generating category index for file '.$sitemap_file_index);
             $category_query->cleanAttribute('limit');
             $category_query->cleanAttribute('offset');
 
             $category_query->limit(MAX_LEN_PER_PROCESS);
-            $category_query->offset((intval($simtemap_file_index) - 1) * MAX_LEN_PER_PROCESS);
+            $category_query->offset(($sitemap_file_index - $current_base_index) * MAX_LEN_PER_PROCESS);
 
-            $list = $this->fetch_next($db, $category_query);
+            $list = $this->change_sql_list_to_sitemap_format('category',$this->fetch_next($db, $category_query));
             if(empty($list)) break;
-            $sitemap_info = $this->build_sitemap_file_for_sql_items($list,$simtemap_file_index);
+            $sitemap_info = $this->build_sitemap_file_for_sql_items($list,$sitemap_file_index);
 
             if(empty($sitemap_info)) break;
             $array_sitemap_index[] = $sitemap_info;
-            $simtemap_file_index += 1;
+            $sitemap_file_index += 1;
         }
         log_to_client("Done for categories index.");
 
@@ -163,14 +191,18 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
         $url = Typecho_Common::url($post['pathinfo'], $options->index);
         return $url;
     }
+	
+    function build_page_url($page){
+        $url = Typecho_Router::url('page',$page);
+	    return Helper::options()->index.$url;
+    }
 
     function build_category_url($cat){
-        $return =  Typecho_Router::url('category',$cat);
-	      return Helper::options()->index.$url;
+        $url =  Typecho_Router::url('category',$cat);
+	    return Helper::options()->index.$url;
     }
 
     function build_site_map_xml_content($list){
-        //if mobile sitemap protocol
         @$mobile = Helper::options()->plugin('HPSitemap')->mobile;
 
         $str='<?xml version="1.0" encoding="UTF-8"?>'."\n";
@@ -204,14 +236,30 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
         return $str;
     }
 
-    function change_sql_list_to_sitemap_format($list){
-        if(!function_exists('array_map')) log_to_client('array_map no exists.');
-        $result = array_map(function($item){
-            return array(
-                'loc'=>isset($item['cid'])?$this->build_post_url($item):$this->build_category_url($item),
-                'lastmod'=>gmdate("Y-m-d\TH:i:s+08:00",$item['last_modified'])
-            );
-        },$list);
+    function change_sql_list_to_sitemap_format($type,$list){
+		if('post'==$type)
+			$result = array_map(function($item){
+			    return array(
+			        'loc'=>$this->build_post_url($item),
+			        'lastmod'=>gmdate("Y-m-d\TH:i:s+08:00",$item['last_modified'])
+			    );
+			},$list);
+		else if('page'==$type)
+			$result = array_map(function($item){
+			    return array(
+			        'loc'=>$this->build_page_url($item),
+			        'lastmod'=>gmdate("Y-m-d\TH:i:s+08:00",$item['last_modified'])
+			    );
+			},$list);
+		else if('category'==$type)
+			$result = array_map(function($item){
+			    return array(
+			        'loc'=>$this->build_category_url($item),
+			        'lastmod'=>gmdate("Y-m-d\TH:i:s+08:00",$item['last_modified'])
+			    );
+			},$list);
+		else
+			$this->die_with_json(1005,'函数参数错误');
         return $result;
     }
 
@@ -222,8 +270,6 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
     }
 
     function build_sitemap_file_for_sql_items($list,$file_index){
-        //如果非空，则继续。
-        $list = $this->change_sql_list_to_sitemap_format($list);
         $str_xml = $this->build_site_map_xml_content($list);
 
         $sitemap_filename = 'sitemap_'.$file_index.'.xml';

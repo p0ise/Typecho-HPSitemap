@@ -6,7 +6,7 @@
  * @category widget
  * @package HPSitemap
  * @author Roogle&雷鬼&锋临
- * @version 2.5.2
+ * @version 2.7
  * @link https://blog.irow.top/archives/256.html
  */
 

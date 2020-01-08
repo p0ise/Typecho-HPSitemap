@@ -6,7 +6,7 @@
  * @category widget
  * @package HPSitemap
  * @author Roogle&雷鬼&锋临
- * @version 2.7
+ * @version 2.8
  * @link https://blog.irow.top/archives/256.html
  */
 
@@ -14,7 +14,6 @@ class HPSitemap_Plugin implements Typecho_Plugin_Interface
 {
     public static function activate(){
         Helper::addAction('update_sitemap', 'HPSitemap_Update');
-
     }
 
     public static function deactivate(){

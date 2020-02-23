@@ -147,7 +147,7 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
                          ->where('table.metas.mid = ?', $cat['parent']));
             $cat['directory'] = urlencode($parent['slug']).'/'.urlencode($cat['slug']);
         }
-        $url =  Typecho_Router::url('category', );
+        $url =  Typecho_Router::url('category', $cat);
         return Helper::options()->index.$url;
     }
     protected function build_site_map_xml_content($list)

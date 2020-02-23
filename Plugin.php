@@ -5,7 +5,7 @@
  * @category widget
  * @package HPSitemap
  * @author Roogle&雷鬼&锋临
- * @version 2.8
+ * @version 2.9
  * @link https://blog.irow.top/archives/256.html
  */
 class HPSitemap_Plugin implements Typecho_Plugin_Interface {

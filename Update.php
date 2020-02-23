@@ -142,6 +142,8 @@ class HPSitemap_Update extends Widget_Abstract_Contents implements Widget_Interf
     }
     protected function build_category_url($cat)
     {
+        $db = Typecho_Db::get();
+        $cat['directory'] = $cat['slug'];
         if (0!=$cat['parent']) {
             $parent = $db->fetchRow($db->select()->from('table.metas')
                          ->where('table.metas.mid = ?', $cat['parent']));

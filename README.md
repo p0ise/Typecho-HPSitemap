@@ -16,7 +16,7 @@
 
 
 ## 食用方法：
-![Typecho 站点地图生成插件 Sitemap 大数据版优化.png](https://blog.irow.top/usr/uploads/2019/07/2806146079.png)
+![插件后台预览图.png](https://blog.irow.top/usr/uploads/2019/07/2806146079.png)
 1. 下载后解压并将文件夹重命名为HPSitemap
 2. 后台设置生成目录和密匙
 3. 访问生成sitemap方法的url，测试生成sitemap，并前往sitemap路径检验是否成功
